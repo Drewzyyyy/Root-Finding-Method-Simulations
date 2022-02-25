@@ -10,7 +10,7 @@ int chooseMethod(){
 	std::cout << "\t[2] Secant Method\n";
 	std::cout << "\t[3] False Position Method\n";
 	std::cout << "\t[0] Exit\n";
-	std::cout << "\tChoice: ";
+	std::cout << "\tChoice:";
 
 	while(1){
 		method = getInput();
@@ -67,19 +67,19 @@ bool askAitken(){
 }
 
 double getLeftEndPt(){
-	std::cout << "\nPlease input the left endpoint: \n";
+	std::cout << "\n\tPlease input the left endpoint: ";
 	return getInput();
 }
 
 double getRightEndPt(double leftEndPt){
-	std::cout << "\nPlease input the right endpoint: \n";
+	std::cout << "\n\tPlease input the right endpoint: ";
 	double rightEndPt = 0.0;
 	while(1){
 		rightEndPt = getInput();
 		if(rightEndPt < leftEndPt){
-			std::cout << "The right endpoint must be greater than the left endpoint.\n\n";
+			std::cout << "\tThe right endpoint must be greater than the left endpoint.\n\n";
 		} else if(leftEndPt == rightEndPt){
-			std::cout << "The left and right endpoints must be different.\n\n";
+			std::cout << "\tThe left and right endpoints must be different.\n\n";
 		} else {
 			break;
 		}
@@ -88,12 +88,12 @@ double getRightEndPt(double leftEndPt){
 }
 
 int getIterations(){
-	std::cout << "\nPlease input the number of iterations: \n";
+	std::cout << "\n\tPlease input the number of iterations: ";
 	int iterations = 0;
 	while(1){
 		iterations = getInput();
 		if(iterations > 0) break;
-		std::cout << "Please input a value greater than 0\n\n";
+		std::cout << "\tPlease input a value greater than 0\n\n";
 	};
 	return iterations;
 }
@@ -105,7 +105,7 @@ bool runProgram(){
 		if(run == 0 || run == 1){
 			break;
 		}
-		std::cout << "Invalid input. Please try again.\n\n";	
+		std::cout << "\tInvalid input. Please try again.\n\n";	
 	}
 	return run;
 }

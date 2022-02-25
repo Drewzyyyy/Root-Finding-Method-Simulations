@@ -24,19 +24,21 @@ double f(double x){
  * @return double* Returns the array of results, incase the user wants to perform Aitken's Method
  */
 double* doBisection(int iterations, double leftEndPt, double rightEndPt){
-	double midpoint = 0.0;
+	double midpoint = 0.0, fMidpoint = 0.0;
 	double* result = new double[iterations];
 	std::cout << std::setw(colWidth) << "Iteration" << std::setw(colWidth) << "Approx" << std::setw(colWidth) << "Interval\n";
 	for(int i = 0; i < iterations; i++){
 		midpoint = (leftEndPt + rightEndPt) / 2;
 		result[i] = midpoint;
+		fMidpoint = f(midpoint);
 
-		if(f(midpoint) * f(leftEndPt) > 0){
+		if(fMidpoint * f(leftEndPt) > 0){
 			leftEndPt = midpoint;
 		}else {
 			rightEndPt = midpoint;
 		}
 		std::cout << std::setw(colWidth) << i << std::setw(colWidth) << midpoint << std::setw(colWidth-8) << "[" << leftEndPt << ", " << rightEndPt << "]\n";
+		if(fMidpoint == 0) break;
 	}
 	return result;
 }
@@ -50,13 +52,18 @@ double* doBisection(int iterations, double leftEndPt, double rightEndPt){
  * @return double* Returns the array of results, incase the user wants to perform Aitken's Method
  */
 double* doSecant(int iterations, double leftEndPt, double rightEndPt){
-	double zero = 0.0, leftSecant = 0.0, rightSecant = 0.0;
+	double zero = 0.0, leftSecant = 0.0, rightSecant = 0.0, denominator = 0.0;
 	double* result = new double[iterations];
 	std::cout << std::setw(colWidth) << "Iteration" << std::setw(colWidth) << "Approx" << std::setw(colWidth) << "Interval\n";
 	for(int i = 0; i < iterations; i++){
 		leftSecant = f(leftEndPt);
 		rightSecant = f(rightEndPt);
-		zero = rightEndPt - (rightSecant * (rightEndPt - leftEndPt)) / (rightSecant - leftSecant);
+		denominator = rightSecant - leftSecant;
+		if(!denominator){
+			std::cout << "\tDivision by zero error\n";
+			return result; 
+		}
+		zero = rightEndPt - (rightSecant * (rightEndPt - leftEndPt)) / denominator;
 		result[i] = zero;
 
 		leftEndPt = rightEndPt;
@@ -75,16 +82,21 @@ double* doSecant(int iterations, double leftEndPt, double rightEndPt){
  * @return double* Returns the array of results, incase the user wants to perform Aitken's Method
  */
 double* doFalsePos(int iterations, double leftEndPt, double rightEndPt){
-	double zero = 0.0, leftSecant = 0.0, rightSecant = 0.0;
+	double zero = 0.0, leftSecant = 0.0, rightSecant = 0.0, denominator = 0.0;
 	double* result = new double[iterations];
 	std::cout << std::setw(colWidth) << "Iteration" << std::setw(colWidth) << "Approx" << std::setw(colWidth) << "Interval\n";
 	for(int i = 0; i < iterations; i++){
 		leftSecant = f(leftEndPt);
 		rightSecant = f(rightEndPt);
-		zero = leftEndPt - (leftSecant * (rightEndPt - leftEndPt)) / (rightSecant - leftSecant);
+		denominator = rightSecant - leftSecant;
+		if(!denominator){
+			std::cout << "\tDivision by zero error\n";
+			return result; 
+		}
+		zero = leftEndPt - (leftSecant * (rightEndPt - leftEndPt)) / denominator;
 		result[i] = zero;
 
-		if(f(zero) * f(leftEndPt) < 0){
+		if(f(zero) * leftSecant < 0){
 			rightEndPt = zero;
 		}else {
 			leftEndPt = zero;
@@ -110,7 +122,7 @@ void doRootFinding(double* (*method)(int iterations, double leftEndPt, double ri
 	iterations = getIterations();
 
 	double* result = method(iterations, leftEndPt, rightEndPt);
-	if(iterations < 3 || !askAitken()){
+	if(iterations < 3 || !askAitken() || !result[0]){
 		return;
 	}
 
