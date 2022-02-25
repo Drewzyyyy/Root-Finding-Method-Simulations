@@ -67,12 +67,12 @@ bool askAitken(){
 }
 
 double getLeftEndPt(){
-	std::cout << "\n\tPlease input the left endpoint: ";
+	std::cout << "\tPlease input the left endpoint: ";
 	return getInput();
 }
 
 double getRightEndPt(double leftEndPt){
-	std::cout << "\n\tPlease input the right endpoint: ";
+	std::cout << "\tPlease input the right endpoint: ";
 	double rightEndPt = 0.0;
 	while(1){
 		rightEndPt = getInput();
@@ -88,7 +88,7 @@ double getRightEndPt(double leftEndPt){
 }
 
 int getIterations(){
-	std::cout << "\n\tPlease input the number of iterations: ";
+	std::cout << "\tPlease input the number of iterations: ";
 	int iterations = 0;
 	while(1){
 		iterations = getInput();

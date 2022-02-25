@@ -38,7 +38,7 @@ double* doBisection(int iterations, double leftEndPt, double rightEndPt){
 			rightEndPt = midpoint;
 		}
 		std::cout << std::setw(colWidth) << i << std::setw(colWidth) << midpoint << std::setw(colWidth-8) << "[" << leftEndPt << ", " << rightEndPt << "]\n";
-		if(fMidpoint == 0) break;
+		if(fMidpoint == 0 || !(rightEndPt - leftEndPt)) break;
 	}
 	return result;
 }
@@ -54,16 +54,16 @@ double* doBisection(int iterations, double leftEndPt, double rightEndPt){
 double* doSecant(int iterations, double leftEndPt, double rightEndPt){
 	double zero = 0.0, leftSecant = 0.0, rightSecant = 0.0, denominator = 0.0;
 	double* result = new double[iterations];
+	std::cout << "\n";
 	std::cout << std::setw(colWidth) << "Iteration" << std::setw(colWidth) << "Approx" << std::setw(colWidth) << "Interval\n";
 	for(int i = 0; i < iterations; i++){
 		leftSecant = f(leftEndPt);
 		rightSecant = f(rightEndPt);
-		denominator = rightSecant - leftSecant;
-		if(!denominator){
-			std::cout << "\tDivision by zero error\n";
+		if((rightSecant - leftSecant) == 0){
+			std::cout << "\tDivision by zero error. Exiting...\n";
 			return result; 
 		}
-		zero = rightEndPt - (rightSecant * (rightEndPt - leftEndPt)) / denominator;
+		zero = rightEndPt - (rightSecant * (rightEndPt - leftEndPt)) / (rightSecant - leftSecant);
 		result[i] = zero;
 
 		leftEndPt = rightEndPt;
@@ -84,16 +84,16 @@ double* doSecant(int iterations, double leftEndPt, double rightEndPt){
 double* doFalsePos(int iterations, double leftEndPt, double rightEndPt){
 	double zero = 0.0, leftSecant = 0.0, rightSecant = 0.0, denominator = 0.0;
 	double* result = new double[iterations];
+	std::cout << "\n";
 	std::cout << std::setw(colWidth) << "Iteration" << std::setw(colWidth) << "Approx" << std::setw(colWidth) << "Interval\n";
 	for(int i = 0; i < iterations; i++){
 		leftSecant = f(leftEndPt);
 		rightSecant = f(rightEndPt);
-		denominator = rightSecant - leftSecant;
-		if(!denominator){
-			std::cout << "\tDivision by zero error\n";
+		if((rightSecant - leftSecant) == 0){
+			std::cout << "\tDivision by zero error. Exiting...\n";
 			return result; 
 		}
-		zero = leftEndPt - (leftSecant * (rightEndPt - leftEndPt)) / denominator;
+		zero = leftEndPt - (leftSecant * (rightEndPt - leftEndPt)) / (rightSecant - leftSecant);
 		result[i] = zero;
 
 		if(f(zero) * leftSecant < 0){
